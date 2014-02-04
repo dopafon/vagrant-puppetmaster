@@ -2,7 +2,7 @@ Vagrant::Config.run do |config|
 
   config.vm.define :puppet1 do |n|
       n.vm.network :hostonly, "192.168.168.9"
-      n.vm.box = "~/vagrant/boxes/OpenSuse12_1x64_July14"
+      n.vm.box = "OpenSuse12_1x64_July14"
       n.vm.host_name = "puppet.puppet.test"
       n.hosts.aliases = ["puppet.puppet.test","puppet"]
 #      n.vm.share_folder "hieradata", "/etc/puppet/hieradata", "~/vagrant/puppet/puppetmaster/hieradata"
@@ -23,7 +23,7 @@ Vagrant::Config.run do |config|
   config.vm.define :puppet2 do |n|
       n.vm.customize ["modifyvm", :id, "--memory", 360]
       n.vm.network :hostonly, "192.168.168.13"
-      n.vm.box = "~/vagrant/boxes/OpenSuse12_1x64_July14"
+      n.vm.box = "OpenSuse12_1x64_July14"
       n.vm.host_name = "devpuppet.puppet.test"
       n.vm.provision :shell, :path => "opensuse121.sh"
       n.vm.provision :puppet_server do |puppet|
