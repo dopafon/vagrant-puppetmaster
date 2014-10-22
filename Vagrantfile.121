@@ -1,0 +1,37 @@
+Vagrant::Config.run do |config|
+
+  config.vm.define :puppet1 do |n|
+      n.vm.network :hostonly, "192.168.168.9"
+      n.vm.box = "OpenSuse12_1x64_July14"
+      n.vm.host_name = "puppet.puppet.test"
+      n.hosts.aliases = ["puppet.puppet.test","puppet"]
+#      n.vm.share_folder "hieradata", "/etc/puppet/hieradata", "~/vagrant/puppet/puppetmaster/hieradata"
+      n.vm.share_folder "files", "/export", "~/vagrant/files"
+      n.vm.share_folder "puppet", "/etc/puppet", "puppet"
+      n.vm.provision :shell, :path => "opensuse121.sh"
+      n.vm.provision :puppet do |puppet|
+        puppet.manifests_path = "puppet/manifests"
+        puppet.manifest_file = "site.pp"
+        puppet.module_path = "puppet/modules"
+#        puppet.pp_path = "/etc/puppet"
+        puppet.facter = { "domain" => "puppet.test" }
+      end
+      n.vm.provision :shell, :inline => "/usr/bin/puppet master --manifest=/etc/puppet/manifests/site.pp"
+  end
+
+
+  config.vm.define :puppet2 do |n|
+      n.vm.customize ["modifyvm", :id, "--memory", 360]
+      n.vm.network :hostonly, "192.168.168.13"
+      n.vm.box = "OpenSuse12_1x64_July14"
+      n.vm.host_name = "devpuppet.puppet.test"
+      n.vm.provision :shell, :path => "opensuse121.sh"
+      n.vm.provision :puppet_server do |puppet|
+        puppet.puppet_server = "puppet.puppet.test"
+#        puppet.puppet_node = "devpuppet.puppet.test"
+        puppet.facter = { "domain" => "puppet.test" }
+        puppet.options = "--verbose --report true"
+      end
+  end
+  
+end
