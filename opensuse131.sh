@@ -25,3 +25,8 @@ echo "Install puppet"
 zypper install puppet
 
 echo "Puppet installed!"
+
+
+# Install rubygem augeas
+zypper ar http://download.opensuse.org/repositories/systemsmanagement:/puppet/openSUSE_13.1/ systemmanagement-puppet
+zypper --gpg-auto-import-keys install ruby2.0-rubygem-augeas

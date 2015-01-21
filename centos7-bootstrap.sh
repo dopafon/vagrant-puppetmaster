@@ -16,3 +16,15 @@ yum -y install puppet-server --nogpgcheck
 
 # disble firewall
 service firewalld stop
+
+# create hiera config
+cat <<EOF > /etc/hiera.yaml
+---
+:backends:
+  - yaml
+:yaml:
+  :datadir: /etc/puppet/hieradata
+:hierarchy:
+  - "node/%{::fqdn}"
+  - common
+EOF

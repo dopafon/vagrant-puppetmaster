@@ -4,7 +4,7 @@
 
 set -e
 
-puppetrpm="http://itsrv150.kaipc1.pangora.domain/rpms/puppet-121/x86_64/puppet-2.7.17-1.1.x86_64.rpm"
+puppetrepo="http://download.opensuse.org/repositories/systemsmanagement:/puppet:/devel/SLE_11_SP3"
 
 if [ "$EUID" -ne "0" ]; then
   echo "This script must be run as root." >&2
@@ -12,18 +12,9 @@ if [ "$EUID" -ne "0" ]; then
 fi
 
 if which puppet > /dev/null 2>&1; then
-  echo "Puppet is already installed.. upgrading..."
-	rpm -Uhv $puppetrpm
-	exit 0
+  echo "Puppet is already installed.. delete it..."
+	rpm -e puppet
 fi
 
-# Install facter
-echo "Install facter with zypper"
-zypper install facter
-
-# Install puppet 
-echo "Install puppet from itsrv150"
-rpm -ivh $puppetrpm
-
-echo "Puppet installed!"
-
+zypper ar --no-gpgcheck $puppetrepo puppet-devel
+zypper install puppet --no-gpg-checks --yes
