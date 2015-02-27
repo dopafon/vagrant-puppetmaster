@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # This bootstraps Puppet on opensuse 12.1
-# marco.schroeder@become.eu
+
 
 set -e
 
